@@ -1,0 +1,28 @@
+GET http://localhost:3000/organize/user
+
+###
+
+GET http://localhost:3000/organize/user/67dd9f999d545056f4557deb
+
+###
+
+POST http://localhost:3000/organize/user
+Content-Type: application/json
+
+{
+    "name": "Bolinher",
+    "email": "bolinha@bolinha.com"
+}
+
+###
+DELETE http://localhost:3000/organize/user/67dda8cc5151f49f56c8221f
+
+###
+
+PATCH http://localhost:3000/organize/user/67dda8cc5151f49f56c8221f
+Content-Type: application/json
+
+{
+    "name": "Bolinhs",
+    "email": "bolinha@bo.com"
+}
