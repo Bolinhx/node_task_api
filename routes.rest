@@ -1,8 +1,7 @@
 GET http://localhost:3000/organize/user
-
 ###
 
-GET http://localhost:3000/organize/user/67dd9f999d545056f4557deb
+GET http://localhost:3000/organize/user/67df079c2b3001c9b12cd6f8
 
 ###
 
@@ -10,16 +9,16 @@ POST http://localhost:3000/organize/user
 Content-Type: application/json
 
 {
-    "name": "Bolinher",
+    "name": "Boliiinhas",
     "email": "bolinha@bolinha.com"
 }
 
 ###
-DELETE http://localhost:3000/organize/user/67dda8cc5151f49f56c8221f
+DELETE http://localhost:3000/organize/user/67df079c2b3a01c9b12cd6f8
 
 ###
 
-PATCH http://localhost:3000/organize/user/67dda8cc5151f49f56c8221f
+PUT http://localhost:3000/organize/user/67df079c2b3001c9b02cd6f8
 Content-Type: application/json
 
 {

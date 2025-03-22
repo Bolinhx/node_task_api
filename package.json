@@ -1,15 +1,15 @@
 {
   "name": "organize",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "install" : "npm i",
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongoose": "^8.12.1"
   },
