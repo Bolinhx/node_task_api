@@ -1,12 +1,16 @@
-const {User : UserModel} = require("../models/user");
+const {User : UserModel, User} = require("../models/user");
+const bcrypt = require('bcrypt');
 
 
 const userController = {
     create: async (req, res) => {
         try {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            
             const user = {
                 name: req.body.name,
-                email: req.body.email
+                email: req.body.email,
+                password: hashedPassword,
             };
 
         const response = await UserModel.create(user);
@@ -14,6 +18,26 @@ const userController = {
         res.status(201).json({response, msg: "Usuario criado com sucesso"})
         } catch (err) {
             console.log(err)
+        }
+    },
+
+    login: async (req,res) =>{
+        try {
+            const user = await UserModel.findOne({ email: req.body.email }).select("+password");
+
+            if (!user) {
+                return res.status(400).json({ error: 'Dados Invalidos' });
+            }
+
+            const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ error: "Dados Invalidos" });
+            }
+
+            res.status(200).json({ message: 'Login realizado com sucesso' });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Erro interno no servidor" });
         }
     },
 

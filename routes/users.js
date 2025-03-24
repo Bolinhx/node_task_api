@@ -5,6 +5,9 @@ const userController = require("../controllers/userController");
 router
     .route("/user")
     .post((req,res) => userController.create(req,res));
+router
+    .route("/user/login")
+    .post((req,res) => userController.login(req,res));
 
 router
     .route("/user")
