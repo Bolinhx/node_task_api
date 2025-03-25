@@ -1,0 +1,107 @@
+
+
+### GET All
+GET http://localhost:3000/organize/user
+
+### GET one
+GET http://localhost:3000/organize/user/67df079c2b3001c9b12cd6f8
+
+### Criacao de usuario
+POST http://localhost:3000/organize/user
+Content-Type: application/json
+
+{
+    "name": "teste4",
+    "email": "teste4@gmail.com",
+    "password": "!A12345"
+}
+
+###LOGIN
+POST http://localhost:3000/organize/user/login
+Content-Type: application/json
+
+{
+    "email": "teste4@gmail.com",
+    "password": "!A12345"
+}
+###LOGOUT
+POST http://localhost:3000/organize/user/logout
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UxNWIzZGY0N2MwNDk2MDcxODFmNzAiLCJpYXQiOjE3NDI4Mjk0MjgsImV4cCI6MTc0MjgzMzAyOH0.3by--txpBuyAKNwVBh_6i_RpwRJedi0iwNiDddlI5CQ
+###
+DELETE http://localhost:3000/organize/user/67e15b3df47c049607181f70
+
+### PUT DE USUARIO
+PUT http://localhost:3000/organize/user/67df079c2b3001c9b02cd6f8
+Content-Type: application/json
+
+{
+    "name": "Bolinhs",
+    "email": "bolinha@bo.com"
+}
+
+### Alterar senha
+PATCH http://localhost:3000/organize/user/password-update
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UxOGUxNjk4Y2E5YjBkNDQ0NWFkMzAiLCJpYXQiOjE3NDI4MzU1MTEsImV4cCI6MTc0MjgzOTExMX0.IjQdlJp7Ww8S9z3g6Vdh_iBVNP_Ui-brk80sPkFP-58
+Content-Type: application/json
+
+{
+    "oldPassword": "novaSenha123",
+    "newPassword": "novaSenha123"
+}
+
+### Criar tarefa
+POST  http://localhost:3000/organize/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
+Content-Type: application/json
+
+{
+    "title": "dezembro",
+    "description": "Descrição da tarefa",
+    "dueDate": "2025-06-01",
+    "priority": "alta",
+    "status": "andamento"
+}
+
+###Atualizar Tarefa precisa ser passado esses campos mesmo que vazios e o titulo e obrigatorio
+PUT  http://localhost:3000/organize/tasks/67e30d8dafa07c939735b164
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UxOGUxNjk4Y2E5YjBkNDQ0NWFkMzAiLCJpYXQiOjE3NDI5MzQ1MDEsImV4cCI6MTc0MjkzODEwMX0.zfByualQZQwsKcAhABDYY5t0XBIj3nLlhoVq6xESnUo
+Content-Type: application/json
+
+{
+    "title": "Bolinha",
+    "description": "",
+    "dueDate": "",
+    "status": "",
+    "taskGroup": ""
+}
+
+### Criar tarefa
+PATCH   http://localhost:3000/organize/tasks/assign
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5MzQ2OTAsImV4cCI6MTc0MjkzODI5MH0.2ziJVGmzCv-YNSkwcsaW5OGUgf5EhvQKJ4YW4X0RjSk
+Content-Type: application/json
+
+{
+    "taskId": "67e318c82205574a9ef451be",
+    "email": "bolinha@bolinha.com"
+}
+
+### GET ALL tarefas usuario logado
+GET  http://localhost:3000/organize/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
+
+
+###GET ALL tarefas usuasio logado por prioridade, passar "?status=[pendente,andamento ou concluida]"
+### se passar sem o "?..." ele busca todas as tarefas
+
+GET  http://localhost:3000/organize/tasks/status?status=andamento
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
+
+###GET ALL tarefas usuasio logado por prioridade, passar "?priority=[alta,media ou baixa]"
+### se passar sem o "?..." ele busca todas as tarefas e ordena de alta para baixa
+GET http://localhost:3000/organize/tasks/priority?priority=alta
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5NDA2NDUsImV4cCI6MTc0Mjk0NDI0NX0.qmZa0rVEDgc3F2XcpZg33_ohdq9gDDbhcbCePUObUwY
+
+### DELETE tarefa
+
+DELETE   http://localhost:3000/organize/tasks/67e314bcebf63a5ff0dc9455
+Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5MzQ2OTAsImV4cCI6MTc0MjkzODI5MH0.2ziJVGmzCv-YNSkwcsaW5OGUgf5EhvQKJ4YW4X0RjSk

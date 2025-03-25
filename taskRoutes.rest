@@ -1,0 +1,12 @@
+### Criar tarefa
+POST  http://localhost:3000/organize/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UxOGUxNjk4Y2E5YjBkNDQ0NWFkMzAiLCJpYXQiOjE3NDI4NDA5NDUsImV4cCI6MTc0Mjg0NDU0NX0.OXcfpR3jI9UjzZ6gUgT0oxcl8-Z-gPNQkc1HSvY2sbU
+Content-Type: application/json
+
+{
+    "title": "Nova tarefa",
+    "description": "Descrição da tarefa",
+    "dueDate": "2025-03-30",
+    "taskGroup": ""
+}
+
