@@ -40,7 +40,6 @@ const userController = {
             res.status(500).json({ msg: "Erro interno do servidor." });
         }
     },
-
     login: async (req,res) =>{
         try {
             const user = await UserModel.findOne({ email: req.body.email }).select("+password");
@@ -77,7 +76,6 @@ const userController = {
 
         res.json({ message: "Logout realizado com sucesso." });
     },
-
     getAll: async (req, res) => {
         try{
             const users = await UserModel.find();
@@ -85,8 +83,7 @@ const userController = {
         }catch(err){
             res.status(500).json({message: err.message });
         }
-        },
-    
+    },
     get: async (req, res) => {
         try {
             const id = req.params.id;

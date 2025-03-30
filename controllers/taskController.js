@@ -1,14 +1,74 @@
 const { Task : TaskModel, Task } = require('../models/Task');
-const { TaskGroup } = require('../models/TaskGroup');
+const TaskGroup = require('../models/TaskGroup');
 const {User : UserModel, User} = require("../models/user");
 const jwt = require('jsonwebtoken');
 
 const taskController = {
 
     createTask: async (req, res) => {
-        try {
-            //console.log('Dados recebidos no corpo:', req.body);
+                 // Extrair token de autorização
+                 const token = req.headers.authorization?.split(' ')[1];
+                 if (!token) {
+                     return res.status(401).json({ msg: 'Token de autenticação não fornecido.' });
+                 }
+         
+                 // Decodificar o token JWT
+                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                 const userId = decoded.userId;
+         
+                 // Verificar se o usuário existe
+                 const user = await User.findById(userId);
     
+                 if (!user) {
+                     return res.status(404).json({ msg: 'Usuário não encontrado.' });
+                 }
+         
+        
+        try {
+   
+            // Desestruturar os dados recebidos no corpo da requisição
+            const { title, description, dueDate, taskGroupId, priority, status } = req.body;
+            console.log(taskGroupId);
+            // Verificar se o título foi fornecido
+            if (!title) {
+                return res.status(400).json({ msg: 'Título da tarefa é obrigatório.' });
+            }
+    
+            // Dados para criar a tarefa
+            const taskData = {
+                title,
+                description,
+                dueDate,
+                status: status || "pendente",
+                priority: priority || "media",
+                createdBy: userId,
+                taskGroupId: taskGroupId === "" ? null : taskGroupId, // Aqui utilizamos taskGroupId
+            };
+    
+            // Criar a tarefa
+            const newTask = await Task.create(taskData);
+            await newTask.save();
+            // Se taskGroupId foi fornecido, associar a tarefa ao grupo
+            if (taskGroupId) {
+                const group = await TaskGroup.findById(taskGroupId);
+                if (!group) {
+                    return res.status(404).json({ msg: "Grupo de tarefas não encontrado." });
+                }
+    
+                // Adicionar a tarefa ao grupo
+                group.tasks.push(newTask._id);
+                await group.save();
+            }
+    
+            // Resposta de sucesso
+            res.status(201).json({ msg: "Tarefa criada com sucesso.", task: newTask });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ msg: 'Erro ao criar tarefa.' });
+        }
+    },
+    updateTask: async (req, res) => {
+        try {
             const token = req.headers.authorization?.split(' ')[1];
             if (!token) {
                 return res.status(401).json({ msg: 'Token de autenticação não fornecido.' });
@@ -22,78 +82,78 @@ const taskController = {
                 return res.status(404).json({ msg: 'Usuário não encontrado.' });
             }
     
-            const { title, description, dueDate, taskGroup, priority, status } = req.body;
+            const { id } = req.params;
+            const { title, description, dueDate, taskGroupId, priority, status } = req.body;
     
-            if (!title) {
-                return res.status(400).json({ msg: 'Título da tarefa é obrigatório.' });
+            if (!id) {
+                return res.status(400).json({ msg: 'ID da tarefa é obrigatório.' });
             }
     
-            const taskData = {
-                title,
-                description,
-                dueDate,
-                status: status || "pendente",
-                priority: priority || "media",
-                createdBy: userId,
-                taskGroup: taskGroup === "" ? null : taskGroup,
-            };
+            // Buscar a tarefa a ser atualizada
+            const task = await Task.findById(id);
+            if (!task) {
+                return res.status(404).json({ msg: 'Tarefa não encontrada.' });
+            }
     
-            const newTask = new Task(taskData);
-            await newTask.save();
+            // Verificar se o usuário é o criador da tarefa
+            if (task.createdBy.toString() !== userId) {
+                return res.status(403).json({ msg: 'Apenas o criador da tarefa pode editá-la.' });
+            }
     
-            res.status(201).json({ msg: 'Tarefa criada com sucesso', task: newTask });
+            let taskGroup = null;
     
+            // Verificar se a tarefa já pertence a um grupo
+            if (task.taskGroup) {
+                const currentGroup = await TaskGroup.findById(task.taskGroup).populate('members');
+                if (!currentGroup) {
+                    return res.status(404).json({ msg: 'Grupo de tarefas não encontrado.' });
+                }
+    
+                // Verificar se o usuário é admin ou editor do grupo atual
+                const userIsAdminOrEditor = currentGroup.members.some(member =>
+                    (member.user.toString() === userId) && (member.role === 'admin' || member.role === 'editor')
+                );
+    
+                if (!userIsAdminOrEditor) {
+                    return res.status(403).json({ msg: 'Você precisa ser admin ou editor do grupo para mover a tarefa.' });
+                }
+    
+                // Se a tarefa pertence ao grupo atual, removemos ela deste grupo
+                currentGroup.tasks = currentGroup.tasks.filter(taskId => taskId.toString() !== id);
+                await currentGroup.save();
+            }
+    
+            // Se um novo grupo for passado, associamos a tarefa a esse novo grupo
+            if (taskGroupId) {
+                taskGroup = await TaskGroup.findById(taskGroupId);
+                if (!taskGroup) {
+                    return res.status(404).json({ msg: 'Novo grupo de tarefas não encontrado.' });
+                }
+    
+                // Adicionamos a tarefa ao novo grupo
+                taskGroup.tasks.push(task._id);
+                await taskGroup.save();
+    
+                task.taskGroup = taskGroup._id;  // Atualiza a tarefa com o novo grupo
+            } else {
+                task.taskGroup = null;  // Se nenhum grupo for passado, desassociamos a tarefa de qualquer grupo
+            }
+    
+            // Atualizar os outros campos da tarefa
+            task.title = title || task.title;
+            task.description = description || task.description;
+            task.dueDate = dueDate || task.dueDate;
+            task.priority = priority || task.priority;
+            task.status = status || task.status;
+    
+            // Salvar a tarefa com o novo grupo (se necessário) e outras atualizações
+            await task.save();
+    
+            res.status(200).json({ msg: 'Tarefa atualizada com sucesso.', task });
         } catch (err) {
             console.error(err);
-            res.status(500).json({ msg: 'Erro ao criar tarefa.' });
+            res.status(500).json({ msg: 'Erro ao atualizar tarefa.' });
         }
-    },
-    updateTask: async (req, res) => {
-
-        const token = req.headers.authorization?.split(' ')[1];
-        if (!token) {
-            return res.status(401).json({ msg: 'Token de autenticação não fornecido.' });
-        }
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const { id } = req.params; 
-        const { title, description, status, dueDate, assignedTo } = req.body;
-        const userId = decoded.userId; 
-
-
-    if (!userId) {
-        return res.status(401).json({ msg: "Usuário não autenticado." });
-    }
-
-    try {
-        const task = await Task.findById(id);
-        if (!task) {
-            return res.status(404).json({ msg: "Tarefa não encontrada." });
-        }
-
-        if (task.createdBy.toString() !== userId) {
-            return res.status(403).json({ msg: "Apenas o criador da tarefa pode editá-la." });
-        }
-
-        if (title !== undefined && (!title.trim() || title.length < 3)) {
-            return res.status(400).json({ msg: "O título da tarefa deve ter pelo menos 3 caracteres." });
-        }
-
-        if (title) task.title = title;
-        if (description) task.description = description;
-        if (status) task.status = status;
-        if (dueDate) task.dueDate = dueDate;
-        if (assignedTo) task.assignedTo = assignedTo;
-
-        await task.save();
-
-        res.status(200).json({ task, msg: "Tarefa atualizada com sucesso." });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: "Erro ao atualizar a tarefa", error: error.message });
-    }
     },
     assignTask: async (req,res) => {
         const token = req.headers.authorization?.split(' ')[1];
@@ -179,21 +239,18 @@ const taskController = {
         const { status } = req.query;
 
         try {
-            // Criamos um filtro baseado no status passado (se existir)
             const filter = { createdBy: userId };
             if (status) {
-                // Valida se o status é um dos valores válidos
                 if (!["pendente", "andamento", "concluida"].includes(status)) {
                     return res.status(400).json({ msg: "Status inválido." });
                 }
                 filter.status = status; // Filtra pelo status
             }
     
-            // Buscamos as tarefas e ordenamos pela dueDate (data de vencimento)
             const tasks = await Task.find(filter)
-                .sort({ dueDate: 1 })  // Ordena pela dueDate (mais próxima primeiro)
-                .lean();  // Utiliza o método lean() para obter documentos mais simples
-    
+                .sort({ dueDate: 1 }) 
+                .lean();  
+                
             res.status(200).json(tasks);
         } catch (error) {
             console.error(error);

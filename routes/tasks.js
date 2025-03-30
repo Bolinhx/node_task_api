@@ -37,8 +37,6 @@ router
     .route("/tasks/:taskId")
     .delete(authMiddleware,(req,res) => taskController.deleteTask(req,res));
 
-
-// buscar ttarefa especifica
-
+// buscar tarefa por id ou nome ? ??
 
 module.exports = router;

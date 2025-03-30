@@ -14,10 +14,10 @@ const taskGroupSchema = new mongoose.Schema({
         required: true
     },
     members: [
-      {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        role: { type: String, enum: ["admin", "editor", "viewer"], default: "viewer" }
-      }
+        {
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+            role: { type: String, enum: ["admin", "editor", "viewer"], default: "viewer" }
+        }
     ],
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Task" }],
     createdAt: {
@@ -28,7 +28,4 @@ const taskGroupSchema = new mongoose.Schema({
 
 const TaskGroup = mongoose.model('TaskGroup', taskGroupSchema);
 
-module.exports = {
-    TaskGroup,
-    taskGroupSchema,
-}
+module.exports = TaskGroup;

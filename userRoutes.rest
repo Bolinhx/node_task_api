@@ -11,8 +11,8 @@ POST http://localhost:3000/organize/user
 Content-Type: application/json
 
 {
-    "name": "teste4",
-    "email": "teste4@gmail.com",
+    "name": "teste7",
+    "email": "teste7@gmail.com",
     "password": "!A12345"
 }
 
@@ -21,7 +21,7 @@ POST http://localhost:3000/organize/user/login
 Content-Type: application/json
 
 {
-    "email": "teste4@gmail.com",
+    "email": "teste7@gmail.com",
     "password": "!A12345"
 }
 ###LOGOUT
@@ -49,33 +49,34 @@ Content-Type: application/json
     "newPassword": "novaSenha123"
 }
 
-### Criar tarefa
+### Criar tarefa 67e44e754c67fd97d2a5b64a essa
 POST  http://localhost:3000/organize/tasks
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
 Content-Type: application/json
 
 {
-    "title": "dezembro",
+    "title": "adicionando tarefa com grupo",
     "description": "Descrição da tarefa",
     "dueDate": "2025-06-01",
     "priority": "alta",
-    "status": "andamento"
+    "status": "andamento",
+    "taskGroupId": "67e44f034c67fd97d2a5b654"
 }
 
 ###Atualizar Tarefa precisa ser passado esses campos mesmo que vazios e o titulo e obrigatorio
-PUT  http://localhost:3000/organize/tasks/67e30d8dafa07c939735b164
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UxOGUxNjk4Y2E5YjBkNDQ0NWFkMzAiLCJpYXQiOjE3NDI5MzQ1MDEsImV4cCI6MTc0MjkzODEwMX0.zfByualQZQwsKcAhABDYY5t0XBIj3nLlhoVq6xESnUo
+PUT  http://localhost:3000/organize/tasks/67e44e754c67fd97d2a5b64a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
 Content-Type: application/json
 
 {
-    "title": "Bolinha",
-    "description": "",
+    "title": "dezembroo",
+    "description": "descricao",
     "dueDate": "",
     "status": "",
-    "taskGroup": ""
+    "taskGroupId": "67e44f034c67fd97d2a5b654"
 }
 
-### Criar tarefa
+### ADICIONAR membro a tarefa
 PATCH   http://localhost:3000/organize/tasks/assign
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5MzQ2OTAsImV4cCI6MTc0MjkzODI5MH0.2ziJVGmzCv-YNSkwcsaW5OGUgf5EhvQKJ4YW4X0RjSk
 Content-Type: application/json
@@ -87,12 +88,10 @@ Content-Type: application/json
 
 ### GET ALL tarefas usuario logado
 GET  http://localhost:3000/organize/tasks
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
 
 ###GET ALL tarefas usuasio logado por prioridade, passar "?status=[pendente,andamento ou concluida]"
 ### se passar sem o "?..." ele busca todas as tarefas
-
 GET  http://localhost:3000/organize/tasks/status?status=andamento
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5Mzk1MjEsImV4cCI6MTc0Mjk0MzEyMX0.J82WU0v1vL4R-FNH5gcUI_QGQFpuZ9sJjAhZuz5BsOo
 
@@ -102,6 +101,44 @@ GET http://localhost:3000/organize/tasks/priority?priority=alta
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5NDA2NDUsImV4cCI6MTc0Mjk0NDI0NX0.qmZa0rVEDgc3F2XcpZg33_ohdq9gDDbhcbCePUObUwY
 
 ### DELETE tarefa
+DELETE   http://localhost:3000/organize/tasks/67e43bcf2dc948ff9db5132c
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTEyOTAsImV4cCI6MTc0MzAxNDg5MH0.CX8ICvi_6igmBaKVkwH2kMILaOv0ZsZO4RfFzddPVl0
 
-DELETE   http://localhost:3000/organize/tasks/67e314bcebf63a5ff0dc9455
-Authorization: Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5MzQ2OTAsImV4cCI6MTc0MjkzODI5MH0.2ziJVGmzCv-YNSkwcsaW5OGUgf5EhvQKJ4YW4X0RjSk
+### Criar grupo de tarefa
+POST  http://localhost:3000/organize/task-groups
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
+Content-Type: application/json
+
+{
+    "name": "Grupo do teste novo",
+    "description": "grupo"
+}
+
+### Adicionar membro ao grupo requer passar o ID do grupo
+POST  http://localhost:3000/organize/task-groups/67e414e7e1fcb6aa737d5d50/members
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2UzMTI4YTlmZmY3N2Y2NjI3ZjFiZjQiLCJpYXQiOjE3NDI5OTk4MzcsImV4cCI6MTc0MzAwMzQzN30.Ze-Eds4gRVEafXtVecRNvmLmZdIjRkkXgJiaTTgDlRs
+Content-Type: application/json
+
+{
+    "email": "teste5@gmail.com",
+    "role": ""
+}
+
+### Busca todo os grupos que o usuario tem ou faz parte pode passar parametro
+//task-groups?member=true OU /task-groups?created=true
+GET http://localhost:3000/organize/task-groups?created=true
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
+
+### DELETA um grupo SE o user for admin
+DELETE http://localhost:3000/organize/task-groups/67e43c912dc948ff9db5133f
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0M2JhYTJkYzk0OGZmOWRiNTEzMjgiLCJpYXQiOjE3NDMwMTU0MzMsImV4cCI6MTc0MzAxOTAzM30.BDpvyZI6zXUmaCnnPN-96b1_6zMmCmb0IFMecZPOH54
+
+### EDITAR nome e descricao do grupo se for ADMIN passar ID DO GRUPO se vazio da 200 e nao altera
+PUT  http://localhost:3000/organize/task-groups/67e424a4f94d6e3ea574e067
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2U0MTlhMDJhYjAxNDFmOWRiNDA0NDkiLCJpYXQiOjE3NDMwMDQ5NTYsImV4cCI6MTc0MzAwODU1Nn0.i4h3cD_xNC9PbqibxTh99N_YNjZJCtSQ5zq20-nHs-A
+Content-Type: application/json
+
+{
+    "name": "Novo nome do grupo",
+    "description": "nova descricao"
+}
